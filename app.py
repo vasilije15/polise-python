@@ -35,12 +35,12 @@ class LoginWindow:
         self.frame.place(relx=0, rely=0, relwidth=1, relheight=1)
 
         # Login forma
-        # Polja za email
-        self.email_label = tk.Label(self.frame, text="Ime: ", bg="#cce5ff", font=font)
-        self.email_label.place(height=30, width=30, x=50, y=40)
+        # Polja za username
+        self.username_label = tk.Label(self.frame, text="Ime: ", bg="#cce5ff", font=font)
+        self.username_label.place(height=30, width=30, x=50, y=40)
 
-        self.email_entry = tk.Entry(self.frame, font=font)
-        self.email_entry.place(height=30, width=120, x=90, y=40)
+        self.username_entry = tk.Entry(self.frame, font=font)
+        self.username_entry.place(height=30, width=120, x=90, y=40)
 
         # Polja za password
         self.password_label = tk.Label(self.frame, text="Šifra: ", bg="#cce5ff", font=font)
@@ -56,10 +56,10 @@ class LoginWindow:
         self.loginButton.place(height=40, width=100, x=100, y=140)
 
     def validate_data(self):
-        email = self.email_entry.get()
+        username = self.username_entry.get()
         password = self.password_entry.get()
 
-        if not email:
+        if not username:
             messagebox.showerror("Greška", "Morate unijeti ime!")
             return False
 
@@ -68,7 +68,7 @@ class LoginWindow:
             return False
 
         json_to_send = {
-            'email': email,
+            'username': username,
             'password': password
         }
 
@@ -92,7 +92,7 @@ class LoginWindow:
 
             data = response.json()
             token = data["token"]
-            username = data["username"]
+            username = data["name"]
             print(token)
             print(username)
 
@@ -499,12 +499,15 @@ class InsuranceCard:
 
             text = row['text']
             text_str = text
+            # if 'cid' in text_str.lower():
+            #     text_str = text_str.strip('(')
+            #     text_str = text_str.strip(')')
+            #     ascii_num = text_str.split(':')[-1]
+            #     ascii_num = int(ascii_num)
+            #     text = chr(ascii_num)  # 66 = 'B' in ascii
+
             if 'cid' in text_str.lower():
-                text_str = text_str.strip('(')
-                text_str = text_str.strip(')')
-                ascii_num = text_str.split(':')[-1]
-                ascii_num = int(ascii_num)
-                text = chr(ascii_num)  # 66 = 'B' in ascii
+                text = 'N/A'
 
             # x0 - lijeva pozicija teksta u PDF-u
             x0 = float(row['x0'])
@@ -515,11 +518,11 @@ class InsuranceCard:
             # top -  gornja pozicija teksta u PDF-u
             top = float(row['top'])
 
-            if x0 == 474.336 and top == 36.733:
+            if 33 < top < 37 and x1 > 450:
                 print("zamjena: " + text)
                 zamjena = text
 
-            if x0 == 474.336 and top == 54.733:
+            if 53 < top < 56 and x1 > 450:
                 print("is_br_polisa: " + text)
                 is_br_polisa = text
 
